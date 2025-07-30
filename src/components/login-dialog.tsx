@@ -89,3 +89,6 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           </Button>
         </DialogFooter>
       </DialogContent>
+    </Dialog>
+  );
+}

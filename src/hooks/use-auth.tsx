@@ -1,8 +1,9 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, signInAnonymously, type User as FirebaseAuthUser } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 
 interface User {
@@ -39,12 +40,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
+          let createdAtDate: Date;
+          if (userData.createdAt instanceof Timestamp) {
+            createdAtDate = userData.createdAt.toDate();
+          } else {
+            createdAtDate = new Date();
+          }
+
           setUser({
             uid: fbUser.uid,
             name: userData.name,
             email: userData.email,
             avatar: `https://i.pravatar.cc/150?u=${userData.email}`,
-            createdAt: userData.createdAt.toDate(),
+            createdAt: createdAtDate,
           });
         }
       } else {
