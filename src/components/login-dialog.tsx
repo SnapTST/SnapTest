@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoginDialogProps {
   open: boolean;
@@ -23,21 +25,25 @@ interface LoginDialogProps {
 export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
+  const { toast } = useToast();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!name || !email) {
-      // Simple validation
+      toast({
+        title: "Validation Error",
+        description: "Please enter your name and email.",
+        variant: "destructive"
+      })
       return;
     }
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      login(name, email);
-      setIsLoading(false);
-      onOpenChange(false);
-    }, 1000);
+    
+    await login(name, email);
+    onOpenChange(false);
+    toast({
+        title: "Logged In!",
+        description: "Welcome back!",
+    })
   };
 
   return (
@@ -46,7 +52,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
         <DialogHeader>
           <DialogTitle>Log In / Sign Up</DialogTitle>
           <DialogDescription>
-            Enter your details to access your dashboard. This is a mock login.
+            Enter your details to access your dashboard.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -77,12 +83,9 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleLogin} disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button type="submit" onClick={handleLogin} disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Log In
           </Button>
         </DialogFooter>
       </DialogContent>
-    </Dialog>
-  );
-}
