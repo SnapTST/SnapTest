@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Crown } from "lucide-react";
-import Image from "next/image";
 
 const freeFeatures = [
     { text: "Unlimited AI Requests", included: true },
@@ -21,11 +20,8 @@ export default function PremiumPage() {
             <p className="text-lg text-muted-foreground mt-4">All features are now free for everyone, supported by ads.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-             <div className="w-full flex justify-center md:col-span-2">
-                <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
-            </div>
-            <Card className="md:col-span-2">
+        <div className="grid gap-8 max-w-lg mx-auto">
+            <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">Free Plan <Crown className="text-yellow-500" /></CardTitle>
                     <CardDescription>Enjoy unlimited access to all our powerful features.</CardDescription>
@@ -45,9 +41,6 @@ export default function PremiumPage() {
                     <Button variant="outline" className="w-full" disabled>You have access to all features!</Button>
                 </CardFooter>
             </Card>
-             <div className="w-full flex justify-center md:col-span-2">
-                <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
-            </div>
         </div>
     </div>
   );

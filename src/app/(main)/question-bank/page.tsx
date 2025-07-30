@@ -8,13 +8,12 @@ import { generateTestFromBook, type GenerateTestFromBookOutput } from '@/ai/flow
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, BookOpen, Loader2, FileQuestion, Key } from "lucide-react";
+import { BookOpen, Loader2, FileQuestion, Key } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import Image from 'next/image';
 
 const formSchema = z.object({
   bookName: z.string().min(1, { message: "Please select a book." }),
@@ -56,30 +55,15 @@ export default function QuestionBankPage() {
     }
   }
   
-  const preMadePapers = [
-    {
-      title: "CBSE Class 10 Science - Sample Paper 2024",
-      details: "Subject: Science | Grade: 10"
-    },
-    {
-      title: "NCERT Class 12 Maths - Chapter 3 Matrices",
-      details: "Subject: Mathematics | Grade: 12"
-    }
-  ];
-
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
         <BookOpen className="w-10 h-10 text-primary" />
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Question Bank</h1>
-          <p className="text-muted-foreground">Generate tests from popular books or browse pre-made papers.</p>
+          <p className="text-muted-foreground">Generate tests from popular books.</p>
         </div>
       </div>
-
-       <div className="w-full flex justify-center">
-          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
-        </div>
 
       <Card>
         <CardHeader>
@@ -203,9 +187,6 @@ export default function QuestionBankPage() {
         </Card>
       )}
 
-      <div className="w-full flex justify-center">
-          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
-      </div>
     </div>
   );
 }

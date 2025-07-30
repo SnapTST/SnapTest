@@ -87,30 +87,24 @@ export default function NcertSolutionsPage() {
         </CardContent>
       </Card>
       
-      <Card>
-          <CardHeader>
-              <CardTitle>AI Generated Summary</CardTitle>
-              <CardDescription>Your summary will appear below. If it's your first time, an example is shown.</CardDescription>
-          </CardHeader>
-          <CardContent className="prose prose-sm max-w-none dark:prose-invert min-h-[150px]">
-             {isLoading && (
-              <div className="flex justify-center items-center h-full">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            )}
-            {!isLoading && summary && (
-              <p>{summary}</p>
-            )}
-            {!isLoading && !summary && (
-              <>
-                <h4>Original Question:</h4>
-                <p>Why is diffusion insufficient to meet the oxygen requirements of multi-cellular organisms like humans?</p>
-                <h4>Example Summary:</h4>
-                <p>In single-celled organisms, the entire surface is in contact with the environment, making diffusion a quick way to get oxygen. However, in complex multi-cellular organisms like humans, most cells are not in direct contact with the air. Because of this, diffusion is too slow to deliver oxygen to all the cells deep inside the body. That's why humans have a specialized respiratory system with lungs and a circulatory system with blood and hemoglobin to efficiently transport oxygen to every cell.</p>
-              </>
-            )}
-          </CardContent>
-      </Card>
+      {(isLoading || summary) && (
+        <Card>
+            <CardHeader>
+                <CardTitle>AI Generated Summary</CardTitle>
+                <CardDescription>Your summary will appear below.</CardDescription>
+            </CardHeader>
+            <CardContent className="prose prose-sm max-w-none dark:prose-invert min-h-[150px]">
+              {isLoading && (
+                <div className="flex justify-center items-center h-full">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+              )}
+              {!isLoading && summary && (
+                <p>{summary}</p>
+              )}
+            </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

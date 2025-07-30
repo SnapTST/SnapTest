@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import Image from 'next/image';
 
 const formSchema = z.object({
   topic: z.string().min(3, { message: 'Topic must be at least 3 characters long.' }),
@@ -76,9 +75,6 @@ export default function WorksheetGeneratorPage() {
             <h1 className="text-3xl font-bold tracking-tight">Worksheet Generator</h1>
             <p className="text-muted-foreground">Create printable worksheets for any topic and grade level.</p>
           </div>
-      </div>
-      <div className="w-full flex justify-center">
-          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
       </div>
       <Card>
         <CardHeader>
@@ -172,9 +168,6 @@ export default function WorksheetGeneratorPage() {
           </CardContent>
         </Card>
       )}
-       <div className="w-full flex justify-center">
-          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
-        </div>
     </div>
   );
 }
