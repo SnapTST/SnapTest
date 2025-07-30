@@ -30,20 +30,20 @@ const prompt = ai.definePrompt({
   name: 'generateQuizPrompt',
   input: {schema: GenerateQuizInputSchema},
   output: {schema: GenerateQuizOutputSchema},
-  prompt: `You are a quiz generator. Generate a quiz on the following topic: {{{topic}}}. The quiz should have {{{numberOfQuestions}}} questions. Return the quiz in JSON format with the keys \"question\", \"options\", and \"answer\". The answer key must be an integer indicating the index of the correct answer in the options array.
+  prompt: `You are a quiz generator. Generate a quiz on the following topic: {{{topic}}}. The quiz should have {{{numberOfQuestions}}} questions. Return the quiz in JSON format with the keys "question", "options", and "answer". The answer key must be an integer indicating the index of the correct answer in the options array.
 
 Example:
 {
-  \"quiz\": [
+  "quiz": [
     {
-      \"question\": \"What is the capital of France?\",
-      \"options\": [\"Berlin\", \"Paris\", \"Rome\", \"Madrid\"],
-      \"answer\": 1
+      "question": "What is the capital of France?",
+      "options": ["Berlin", "Paris", "Rome", "Madrid"],
+      "answer": 1
     },
     {
-      \"question\": \"What is the highest mountain in the world?\",
-      \"options\": [\"K2\", \"Kangchenjunga\", \"Makalu\", \"Mount Everest\"],
-      \"answer\": 3
+      "question": "What is the highest mountain in the world?",
+      "options": ["K2", "Kangchenjunga", "Makalu", "Mount Everest"],
+      "answer": 3
     }
   ]
 }`,
