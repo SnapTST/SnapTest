@@ -19,12 +19,12 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="text-center sm:text-left">
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground">Welcome back{user ? `, ${user.name.split(' ')[0]}`: ''}! Here's your recent activity.</p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
             <Link href="/question-bank"><PlusCircle className="mr-2 h-4 w-4" /> Create New Test</Link>
         </Button>
       </div>
@@ -36,37 +36,39 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent>
             {recentTests.length > 0 ? (
-                <Table>
-                    <TableHeader>
-                    <TableRow>
-                        <TableHead>Test Name</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Score</TableHead>
-                        <TableHead></TableHead>
-                    </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                    {recentTests.map((test) => (
-                        <TableRow key={test.id}>
-                        <TableCell className="font-medium">{test.name}</TableCell>
-                        <TableCell><Badge variant="outline">{test.subject}</Badge></TableCell>
-                        <TableCell>{test.date}</TableCell>
-                        <TableCell>
-                            <Badge variant={test.score === 'In Progress' ? 'secondary' : 'default'}>{test.score}</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">View</Button>
-                        </TableCell>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                        <TableRow>
+                            <TableHead>Test Name</TableHead>
+                            <TableHead>Subject</TableHead>
+                            <TableHead className="hidden md:table-cell">Date</TableHead>
+                            <TableHead>Score</TableHead>
+                            <TableHead><span className="sr-only">Actions</span></TableHead>
                         </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                        {recentTests.map((test) => (
+                            <TableRow key={test.id}>
+                            <TableCell className="font-medium">{test.name}</TableCell>
+                            <TableCell><Badge variant="outline">{test.subject}</Badge></TableCell>
+                            <TableCell className="hidden md:table-cell">{test.date}</TableCell>
+                            <TableCell>
+                                <Badge variant={test.score === 'In Progress' ? 'secondary' : 'default'}>{test.score}</Badge>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <Button variant="ghost" size="sm">View</Button>
+                            </TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                </div>
             ) : (
                 <div className="flex flex-col items-center justify-center text-center p-8 border-2 border-dashed rounded-lg">
                     <Info className="h-10 w-10 text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold">No Recent Tests</h3>
-                    <p className="text-muted-foreground">You haven't created any tests yet. Get started by creating a new test.</p>
+                    <p className="text-muted-foreground max-w-xs">You haven't created any tests yet. Get started by creating a new test.</p>
                 </div>
             )}
         </CardContent>

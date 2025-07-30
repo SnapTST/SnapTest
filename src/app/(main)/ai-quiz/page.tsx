@@ -108,80 +108,82 @@ export default function AiQuizPage() {
           </div>
         </div>
 
-        {!quiz && score === null && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Create a New Quiz</CardTitle>
-              <CardDescription>Enter a topic and the number of questions to start.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <FormField control={form.control} name="topic" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Topic</FormLabel>
-                      <FormControl><Input placeholder="e.g., Photosynthesis, World War II" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={form.control} name="numberOfQuestions" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Number of Questions</FormLabel>
-                      <FormControl><Input type="number" min="1" max="10" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Generate Quiz
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        )}
-
-        {isLoading && <div className="flex justify-center items-center h-64"><Loader2 className="h-16 w-16 animate-spin text-primary" /></div>}
-
-        {currentQuestion && score === null && (
-            <Card>
+        <Card className="w-full max-w-2xl mx-auto">
+            {!quiz && score === null && (
+            <>
                 <CardHeader>
-                    <Progress value={progress} className="mb-4" />
-                    <CardTitle>Question {currentQuestionIndex + 1} of {quiz.quiz.length}</CardTitle>
-                    <CardDescription className="text-lg pt-2">{currentQuestion.question}</CardDescription>
+                <CardTitle>Create a New Quiz</CardTitle>
+                <CardDescription>Enter a topic and the number of questions to start.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <RadioGroup onValueChange={(value) => handleAnswerSelect(parseInt(value))} value={userAnswers[currentQuestionIndex]?.toString()}>
-                        {currentQuestion.options.map((option, index) => (
-                            <div key={index} className="flex items-center space-x-2 p-3 border rounded-md has-[:checked]:bg-secondary">
-                                <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                                <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">{option}</Label>
-                            </div>
-                        ))}
-                    </RadioGroup>
-                </CardContent>
-                <CardFooter>
-                    <Button onClick={handleNextQuestion} disabled={userAnswers[currentQuestionIndex] === undefined}>
-                        {currentQuestionIndex === quiz.quiz.length - 1 ? 'Submit Quiz' : 'Next Question'}
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <FormField control={form.control} name="topic" render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Topic</FormLabel>
+                        <FormControl><Input placeholder="e.g., Photosynthesis, World War II" {...field} /></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )} />
+                    <FormField control={form.control} name="numberOfQuestions" render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Number of Questions</FormLabel>
+                        <FormControl><Input type="number" min="1" max="10" {...field} /></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )} />
+                    <Button type="submit" disabled={isLoading} className="w-full">
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        Generate Quiz
                     </Button>
-                </CardFooter>
-            </Card>
-        )}
-
-        {score !== null && (
-            <Card className="text-center">
-                <CardHeader>
-                    <CardTitle className="text-3xl">Quiz Complete!</CardTitle>
-                    <CardDescription>You scored:</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-6xl font-bold text-primary">{Math.round(score)}%</p>
+                    </form>
+                </Form>
                 </CardContent>
-                <CardFooter className="justify-center">
-                    <Button onClick={handleRestart}>Take Another Quiz</Button>
-                </CardFooter>
-            </Card>
-        )}
+            </>
+            )}
+
+            {isLoading && <div className="flex justify-center items-center h-64"><Loader2 className="h-16 w-16 animate-spin text-primary" /></div>}
+
+            {currentQuestion && score === null && (
+                <>
+                    <CardHeader>
+                        <Progress value={progress} className="mb-4" />
+                        <CardTitle>Question {currentQuestionIndex + 1} of {quiz.quiz.length}</CardTitle>
+                        <CardDescription className="text-lg pt-2">{currentQuestion.question}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <RadioGroup onValueChange={(value) => handleAnswerSelect(parseInt(value))} value={userAnswers[currentQuestionIndex]?.toString()}>
+                            {currentQuestion.options.map((option, index) => (
+                                <div key={index} className="flex items-center space-x-2 p-3 border rounded-md has-[:checked]:bg-secondary">
+                                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">{option}</Label>
+                                </div>
+                            ))}
+                        </RadioGroup>
+                    </CardContent>
+                    <CardFooter>
+                        <Button onClick={handleNextQuestion} disabled={userAnswers[currentQuestionIndex] === undefined} className="w-full">
+                            {currentQuestionIndex === quiz.quiz.length - 1 ? 'Submit Quiz' : 'Next Question'}
+                        </Button>
+                    </CardFooter>
+                </>
+            )}
+
+            {score !== null && (
+                <>
+                    <CardHeader className="text-center">
+                        <CardTitle className="text-3xl">Quiz Complete!</CardTitle>
+                        <CardDescription>You scored:</CardDescription>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                        <p className="text-6xl font-bold text-primary">{Math.round(score)}%</p>
+                    </CardContent>
+                    <CardFooter className="justify-center">
+                        <Button onClick={handleRestart} className="w-full">Take Another Quiz</Button>
+                    </CardFooter>
+                </>
+            )}
+        </Card>
     </div>
   );
 }

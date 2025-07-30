@@ -70,11 +70,11 @@ export default function Home() {
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
               SnapTest Enhanced uses AI to create personalized quizzes, solve doubts, and generate notes, helping you ace your exams with confidence.
             </p>
-            <div className="flex justify-center gap-4">
-              <Button size="lg" asChild>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button size="lg" asChild className="w-full sm:w-auto">
                 <Link href="/dashboard">Get Started Free <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
                 <Link href="/how-it-works">How It Works</Link>
               </Button>
             </div>
