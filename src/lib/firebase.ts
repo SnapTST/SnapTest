@@ -23,6 +23,7 @@ if (firebaseConfig.apiKey) {
 } else {
     // This is a fallback for server-side rendering or build environments
     // where the env vars might not be available.
+    // We create a dummy app to avoid crashing the build.
     if (!getApps().length) {
         app = initializeApp({});
     } else {
