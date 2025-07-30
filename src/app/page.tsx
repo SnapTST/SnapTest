@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowRight, Book, BrainCircuit, CheckSquare, FileText, Sparkles, Pencil, Layers } from "lucide-react";
@@ -120,7 +121,7 @@ export default function Home() {
       </main>
       <footer className="bg-secondary py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} SnapTest Enhanced. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Prashant Pandey. All rights reserved.</p>
         </div>
       </footer>
     </div>
