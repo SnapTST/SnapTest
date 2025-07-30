@@ -231,7 +231,7 @@ export default function PaperGeneratorPage() {
             const newWindow = window.open('', '', 'height=500, width=500');
             newWindow?.document.write('<html><head><title>Print</title>');
             // You can add styles here for printing
-            newWindow?.document.write('<style>pre { white-space: pre-wrap; font-family: sans-serif; }</style>');
+            newWindow?.document.write('<style>body { font-family: sans-serif; } pre { white-space: pre-wrap; font-family: sans-serif; }</style>');
             newWindow?.document.write('</head><body>');
             newWindow?.document.write(printContent.innerHTML);
             newWindow?.document.write('</body></html>');
@@ -339,8 +339,7 @@ export default function PaperGeneratorPage() {
                       src={src}
                       alt={`Selected preview ${index + 1}`}
                       fill
-                      objectFit="cover"
-                      className="rounded-lg"
+                      className="rounded-lg object-cover"
                     />
                     <Button
                       variant="destructive"
@@ -452,8 +451,7 @@ export default function PaperGeneratorPage() {
                       src={formatImagePreview}
                       alt="Format preview"
                       fill
-                      objectFit="cover"
-                      className="rounded-lg"
+                      className="rounded-lg object-cover"
                     />
                     <Button
                       variant="destructive"
