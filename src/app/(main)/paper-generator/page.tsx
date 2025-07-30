@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, type ChangeEvent } from 'react';
@@ -11,6 +12,7 @@ import {
   XCircle,
   Upload,
   Printer,
+  FileCheck,
 } from 'lucide-react';
 
 import { generateTestPaper } from '@/ai/flows/generate-test-paper';
@@ -96,6 +98,7 @@ export default function PaperGeneratorPage() {
   const [formatImageFile, setFormatImageFile] = useState<File | null>(null);
   const [formatImagePreview, setFormatImagePreview] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -206,11 +209,13 @@ export default function PaperGeneratorPage() {
         formatPhotoDataUri,
       });
       setGeneratedTest(result.testPaper);
-      setShowPreview(true);
       toast({
         title: 'Success!',
         description: 'Your test paper has been generated.',
       });
+       setTimeout(() => {
+        previewRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     } catch (error) {
       console.error('Error generating test paper:', error);
       toast({
@@ -225,12 +230,11 @@ export default function PaperGeneratorPage() {
   };
   
   const handlePrint = () => {
-    if (showPreview) {
+    if (generatedTest) {
         const printContent = document.getElementById('printable-area');
         if (printContent) {
-            const newWindow = window.open('', '', 'height=500, width=500');
+            const newWindow = window.open('', '', 'height=800, width=800');
             newWindow?.document.write('<html><head><title>Print</title>');
-            // You can add styles here for printing
             newWindow?.document.write('<style>body { font-family: sans-serif; } pre { white-space: pre-wrap; font-family: sans-serif; }</style>');
             newWindow?.document.write('</head><body>');
             newWindow?.document.write(printContent.innerHTML);
@@ -260,37 +264,6 @@ export default function PaperGeneratorPage() {
       });
   };
 
-  if (showPreview) {
-    return (
-      <div className="space-y-8">
-          <Card className="shadow-lg">
-              <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="font-headline text-2xl">Generated Test Paper</CardTitle>
-                    <CardDescription>Preview, print, or download your test paper.</CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setShowPreview(false)}>Back to Editor</Button>
-                    <Button onClick={handlePrint}>
-                      <Printer className="mr-2 h-4 w-4" />
-                      Print
-                    </Button>
-                     <Button onClick={handleDownload}>
-                      <Download className="mr-2 h-4 w-4" />
-                      Download
-                    </Button>
-                  </div>
-              </CardHeader>
-              <CardContent>
-                  <ScrollArea className="h-[70vh] rounded-md border p-4" id="printable-area">
-                      <pre className="whitespace-pre-wrap font-sans text-sm">{generatedTest}</pre>
-                  </ScrollArea>
-              </CardContent>
-          </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
@@ -314,7 +287,7 @@ export default function PaperGeneratorPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <Label className="font-bold">Upload Textbook Pages</Label>
+            <Label className="font-bold">1. Upload Textbook Pages</Label>
             <div>
               <input
                 ref={fileInputRef}
@@ -332,7 +305,7 @@ export default function PaperGeneratorPage() {
             </div>
 
             {imagePreviews.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {imagePreviews.map((src, index) => (
                   <div key={index} className="relative aspect-square">
                     <Image
@@ -358,119 +331,124 @@ export default function PaperGeneratorPage() {
             )}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="marks-input" className="font-bold">
-                Total Marks
-              </Label>
-              <Input
-                id="marks-input"
-                type="number"
-                value={marks}
-                onChange={(e) => setMarks(e.target.value)}
-                placeholder="E.g. 25"
-                min="1"
-                className="w-full max-w-xs"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="language-select" className="font-bold">
-                Language
-              </Label>
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger
-                  id="language-select"
+          <div className="space-y-4">
+            <Label className="font-bold">2. Configure Test</Label>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="marks-input">
+                  Total Marks
+                </Label>
+                <Input
+                  id="marks-input"
+                  type="number"
+                  value={marks}
+                  onChange={(e) => setMarks(e.target.value)}
+                  placeholder="E.g. 25"
+                  min="1"
                   className="w-full max-w-xs"
-                >
-                  <SelectValue placeholder="Select language" />
-                </SelectTrigger>
-                <SelectContent>
-                  {LANGUAGES.map((lang) => (
-                    <SelectItem key={lang.value} value={lang.value}>
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2 md:col-span-2">
-              <Label className="font-bold">Question Types</Label>
-              <div className="flex flex-wrap gap-4 items-center">
-                {QUESTION_TYPES.map((type) => (
-                  <div key={type.id} className="flex items-center gap-2">
-                    <Checkbox
-                      id={type.id}
-                      onCheckedChange={(checked) =>
-                        handleQuestionTypeChange(checked as boolean, type.label)
-                      }
-                    />
-                    <Label htmlFor={type.id} className="font-normal">
-                      {type.label}
-                    </Label>
-                  </div>
-                ))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="language-select">
+                  Language
+                </Label>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger
+                    id="language-select"
+                    className="w-full max-w-xs"
+                  >
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {LANGUAGES.map((lang) => (
+                      <SelectItem key={lang.value} value={lang.value}>
+                        {lang.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="exam-format-input" className="font-bold">
-              Exam Format (Optional)
-            </Label>
-            <Textarea
-              id="exam-format-input"
-              value={examFormat}
-              onChange={(e) => setExamFormat(e.target.value)}
-              placeholder="e.g., 'Section A contains 10 multiple choice questions...' or upload a format image below."
-              className="min-h-[100px]"
-            />
-            <div className="space-y-4">
-              <Label className="font-bold">Upload Format Image</Label>
-              <div>
+          
+          <div className="space-y-4">
+            <Label className="font-bold">3. Customize Questions (Optional)</Label>
+            <div className="space-y-2">
+                <Label>Question Types</Label>
+                <div className="flex flex-wrap gap-x-4 gap-y-2 items-center">
+                    {QUESTION_TYPES.map((type) => (
+                    <div key={type.id} className="flex items-center gap-2">
+                        <Checkbox
+                        id={type.id}
+                        onCheckedChange={(checked) =>
+                            handleQuestionTypeChange(checked as boolean, type.label)
+                        }
+                        />
+                        <Label htmlFor={type.id} className="font-normal">
+                        {type.label}
+                        </Label>
+                    </div>
+                    ))}
+                </div>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="exam-format-input">
+                Exam Format Instructions
+                </Label>
+                <Textarea
+                id="exam-format-input"
+                value={examFormat}
+                onChange={(e) => setExamFormat(e.target.value)}
+                placeholder="e.g., 'Section A contains 10 multiple choice questions...' or upload a format image below."
+                className="min-h-[100px]"
+                />
+            </div>
+            <div className="space-y-2">
+                <Label>Upload Format Image</Label>
+                <div>
                 <input
-                  ref={formatFileInputRef}
-                  id="format-image-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFormatImageChange}
+                    ref={formatFileInputRef}
+                    id="format-image-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFormatImageChange}
                 />
                 <Button
-                  variant="secondary"
-                  onClick={() => formatFileInputRef.current?.click()}
+                    variant="secondary"
+                    onClick={() => formatFileInputRef.current?.click()}
                 >
-                  <Upload className="mr-2" />
-                  Upload Format Image
+                    <Upload className="mr-2" />
+                    Upload Format Image
                 </Button>
-              </div>
-
-              {formatImagePreview && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  <div className="relative aspect-square">
-                    <Image
-                      src={formatImagePreview}
-                      alt="Format preview"
-                      fill
-                      className="rounded-lg object-cover"
-                    />
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-1 right-1 h-6 w-6 rounded-full"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeFormatImage();
-                      }}
-                    >
-                      <XCircle className="h-4 w-4" />
-                    </Button>
-                  </div>
                 </div>
-              )}
+                {formatImagePreview && (
+                    <div className="relative aspect-square w-24 mt-2">
+                        <Image
+                        src={formatImagePreview}
+                        alt="Format preview"
+                        fill
+                        className="rounded-lg object-cover"
+                        />
+                        <Button
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-1 right-1 h-6 w-6 rounded-full"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            removeFormatImage();
+                        }}
+                        >
+                        <XCircle className="h-4 w-4" />
+                        </Button>
+                    </div>
+                )}
             </div>
           </div>
+
+
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex-col gap-4 items-stretch">
           <Button
             onClick={handleGenerateTest}
             disabled={imageFiles.length === 0 || isLoading}
@@ -484,26 +462,58 @@ export default function PaperGeneratorPage() {
             )}
             {isLoading ? 'Generating...' : 'Generate Test Paper'}
           </Button>
+          {generatedTest && !isLoading && (
+            <Button
+                onClick={() => previewRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                variant="outline"
+                className="w-full font-bold md:hidden"
+                size="lg"
+            >
+                <FileCheck className="mr-2 h-4 w-4" />
+                Go to Preview
+            </Button>
+          )}
         </CardFooter>
       </Card>
-      {isLoading && (
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Loader2 className="animate-spin" /> Generating Your Test Paper
-            </CardTitle>
-            <CardDescription>
-              Please wait, this may take a minute or two...
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex justify-center items-center p-10">
-            <div className="text-center text-muted-foreground">
-              <p className="mb-2">AI is working hard to create your test based on the provided material.</p>
-              <p>This process involves analyzing the text and generating relevant questions.</p>
-            </div>
-          </CardContent>
-        </Card>
+      
+      {(isLoading || generatedTest) && (
+        <div ref={previewRef} className="mt-8">
+            <Card className="shadow-lg">
+            <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle className="font-headline text-2xl">Generated Test Paper</CardTitle>
+                    <CardDescription>Preview, print, or download your test paper.</CardDescription>
+                </div>
+                <div className="flex gap-2">
+                    <Button onClick={handlePrint} disabled={!generatedTest}>
+                    <Printer className="mr-2 h-4 w-4" />
+                    Print
+                    </Button>
+                    <Button onClick={handleDownload} disabled={!generatedTest}>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
+                    </Button>
+                </div>
+            </CardHeader>
+            <CardContent>
+                {isLoading && (
+                    <div className="flex flex-col justify-center items-center p-10 min-h-[300px]">
+                        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                        <p className="text-muted-foreground font-semibold">AI is generating your test...</p>
+                        <p className="text-muted-foreground text-sm">This can take a minute or two.</p>
+                    </div>
+                )}
+                {generatedTest && (
+                    <ScrollArea className="h-[70vh] rounded-md border p-4" id="printable-area">
+                        <pre className="whitespace-pre-wrap font-sans text-sm">{generatedTest}</pre>
+                    </ScrollArea>
+                )}
+            </CardContent>
+            </Card>
+        </div>
       )}
     </div>
   );
 }
+
+    
