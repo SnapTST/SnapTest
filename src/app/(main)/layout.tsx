@@ -1,4 +1,4 @@
-import { SidebarProvider, Sidebar, SidebarInset, SidebarContent } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarInset } from "@/components/ui/sidebar";
 import { MainHeader } from "@/components/main-header";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { AuthProvider } from "@/hooks/use-auth";
