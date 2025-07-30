@@ -30,6 +30,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 // Helper to convert file to Base64
 const toBase64 = (file: File): Promise<string> =>
@@ -487,6 +488,24 @@ export default function PaperGeneratorPage() {
           </Button>
         </CardFooter>
       </Card>
+      {isLoading && (
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Loader2 className="animate-spin" /> Generating Your Test Paper
+            </CardTitle>
+            <CardDescription>
+              Please wait, this may take a minute or two...
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center items-center p-10">
+            <div className="text-center text-muted-foreground">
+              <p className="mb-2">AI is working hard to create your test based on the provided material.</p>
+              <p>This process involves analyzing the text and generating relevant questions.</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
