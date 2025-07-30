@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
-import { AuthProvider } from '@/hooks/use-auth';
-import { AppLayout } from '@/components/app-layout';
+import { ClientLayout } from '@/components/client-layout';
 
 export const metadata: Metadata = {
   title: 'SnapTest AI Paper Generator',
@@ -26,11 +25,9 @@ export default function RootLayout({
         <link rel="stylesheet" href="/print.css" media="print" />
       </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background")} suppressHydrationWarning>
-        <AuthProvider>
-          <AppLayout>
-            {children}
-          </AppLayout>
-        </AuthProvider>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
         <Toaster />
       </body>
     </html>
