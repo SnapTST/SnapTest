@@ -1,11 +1,15 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusCircle, Info } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const recentTests: any[] = [
     // { id: '1', name: 'Physics - Chapter 4 Test', date: '2023-10-26', score: '85%', subject: 'Physics' },
     // { id: '2', name: 'Algebra II Quiz', date: '2023-10-24', score: '92%', subject: 'Math' },
@@ -18,7 +22,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's your recent activity.</p>
+          <p className="text-muted-foreground">Welcome back{user ? `, ${user.name.split(' ')[0]}`: ''}! Here's your recent activity.</p>
         </div>
         <Button asChild>
             <Link href="/question-bank"><PlusCircle className="mr-2 h-4 w-4" /> Create New Test</Link>
