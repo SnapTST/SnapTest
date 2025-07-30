@@ -1,12 +1,11 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from '@/hooks/use-auth';
-import { AppLayout } from '@/components/app-layout';
+import { Toaster } from '@/components/ui/toaster';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'SnapTest Enhanced',
-  description: 'AI-Powered Test Generation and Study Tools',
+  title: 'SnapTest AI Paper Generator',
+  description: 'Generate test papers from images of your textbook.',
 };
 
 export default function RootLayout({
@@ -22,13 +21,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="/print.css" media="print" />
       </head>
-      <body className="font-body antialiased">
-        <AuthProvider>
-          <AppLayout>
-            {children}
-          </AppLayout>
-        </AuthProvider>
+      <body className={cn("font-body antialiased", "min-h-screen bg-background")} suppressHydrationWarning>
+        {children}
         <Toaster />
       </body>
     </html>
