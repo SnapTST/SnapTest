@@ -203,25 +203,6 @@ export default function QuestionBankPage() {
         </Card>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Pre-made Question Papers</CardTitle>
-          <CardDescription>Download ready-to-use question papers for various subjects.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-4">
-            {preMadePapers.map((paper) => (
-              <li key={paper.title} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border rounded-lg gap-4">
-                <div className="flex-grow">
-                  <h3 className="font-semibold">{paper.title}</h3>
-                  <p className="text-sm text-muted-foreground">{paper.details}</p>
-                </div>
-                <Button variant="outline" className="w-full sm:w-auto"><Download className="mr-2 h-4 w-4" /> Download Full PDF</Button>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
       <div className="w-full flex justify-center">
           <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
       </div>

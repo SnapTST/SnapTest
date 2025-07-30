@@ -136,14 +136,7 @@ export default function DoubtSolverPage() {
               {!isLoading && !answer && <p className="text-muted-foreground">Your answer will appear here...</p>}
             </CardContent>
           </Card>
-           <Card>
-            <CardHeader>
-                <CardTitle>Login for History</CardTitle>
-                <CardDescription>
-                    <a href="#" className="underline">Log in</a> or <a href="#" className="underline">create an account</a> to save your questions and answers.
-                </CardDescription>
-            </CardHeader>
-           </Card>
+           
             <div className="w-full flex justify-center">
               <Image src="https://placehold.co/300x250.png" width={300} height={250} alt="advertisement" data-ai-hint="advertisement banner" />
             </div>
