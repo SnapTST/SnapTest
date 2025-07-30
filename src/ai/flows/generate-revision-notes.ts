@@ -2,7 +2,7 @@
 
 /**
  * @fileOverview A revision notes generator AI agent.
- *
+ * 
  * - generateRevisionNotes - A function that handles the generation of revision notes.
  * - GenerateRevisionNotesInput - The input type for the generateRevisionNotes function.
  * - GenerateRevisionNotesOutput - The return type for the generateRevisionNotes function.
