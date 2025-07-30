@@ -1,6 +1,8 @@
 import type {Metadata} from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from '@/hooks/use-auth';
+import { AppLayout } from '@/components/app-layout';
 
 export const metadata: Metadata = {
   title: 'SnapTest Enhanced',
@@ -23,7 +25,11 @@ export default function RootLayout({
         <link rel="stylesheet" href="/print.css" media="print" />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <AuthProvider>
+          <AppLayout>
+            {children}
+          </AppLayout>
+        </AuthProvider>
         <Toaster />
       </body>
     </html>

@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LandingHeader } from "@/components/landing-header";
 import { ArrowRight, Book, BrainCircuit, CheckSquare, FileText, Sparkles, Pencil, Layers } from "lucide-react";
 import Image from 'next/image';
 import Link from "next/link";
+import { LandingHeader } from "@/components/landing-header";
 
 const features = [
   {
