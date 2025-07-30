@@ -20,6 +20,7 @@ export type SummarizeNcertSolutionInput = z.infer<typeof SummarizeNcertSolutionI
 
 const SummarizeNcertSolutionOutputSchema = z.object({
   summary: z.string().describe('A concise summary of the NCERT solution.'),
+  youtubeLink: z.string().optional().describe('A relevant YouTube video link to help understand the solution.'),
 });
 export type SummarizeNcertSolutionOutput = z.infer<typeof SummarizeNcertSolutionOutputSchema>;
 
@@ -35,7 +36,7 @@ const prompt = ai.definePrompt({
   output: {schema: SummarizeNcertSolutionOutputSchema},
   prompt: `You are an expert educator specializing in simplifying complex solutions for students.
 
-  Please provide a concise and easy-to-understand summary of the following NCERT solution:
+  Please provide a concise and easy-to-understand summary of the following NCERT solution. Also, find a relevant YouTube video link that explains the topic and include it in your response.
   
   NCERT Solution Text: {{{solutionText}}}
   

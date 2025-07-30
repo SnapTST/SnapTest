@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { summarizeNcertSolution } from '@/ai/flows/summarize-ncert-solution';
+import { summarizeNcertSolution, type SummarizeNcertSolutionOutput } from '@/ai/flows/summarize-ncert-solution';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckSquare, Search, Loader2 } from "lucide-react";
+import { CheckSquare, Search, Loader2, Youtube } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 const formSchema = z.object({
   solutionText: z.string().min(50, { message: 'Solution text must be at least 50 characters long.' }),
@@ -19,7 +20,7 @@ const formSchema = z.object({
 
 export default function NcertSolutionsPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [summary, setSummary] = useState<string | null>(null);
+  const [result, setResult] = useState<SummarizeNcertSolutionOutput | null>(null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -31,10 +32,10 @@ export default function NcertSolutionsPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    setSummary(null);
+    setResult(null);
     try {
-      const result = await summarizeNcertSolution(values);
-      setSummary(result.summary);
+      const response = await summarizeNcertSolution(values);
+      setResult(response);
     } catch (error)
       {
       console.error("Failed to summarize solution:", error);
@@ -60,7 +61,7 @@ export default function NcertSolutionsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Summarize a Solution</CardTitle>
-          <CardDescription>Paste an NCERT solution below to get a quick summary.</CardDescription>
+          <CardDescription>Paste an NCERT solution below to get a quick summary and a relevant video explanation.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -87,11 +88,11 @@ export default function NcertSolutionsPage() {
         </CardContent>
       </Card>
       
-      {(isLoading || summary) && (
+      {(isLoading || result) && (
         <Card>
             <CardHeader>
                 <CardTitle>AI Generated Summary</CardTitle>
-                <CardDescription>Your summary will appear below.</CardDescription>
+                <CardDescription>Your summary and a helpful video will appear below.</CardDescription>
             </CardHeader>
             <CardContent className="prose prose-sm max-w-none dark:prose-invert min-h-[150px]">
               {isLoading && (
@@ -99,8 +100,19 @@ export default function NcertSolutionsPage() {
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
               )}
-              {!isLoading && summary && (
-                <p>{summary}</p>
+              {!isLoading && result && (
+                <>
+                  <p>{result.summary}</p>
+                  {result.youtubeLink && (
+                    <div className="mt-4">
+                      <Button asChild>
+                        <Link href={result.youtubeLink} target="_blank" rel="noopener noreferrer">
+                          <Youtube className="mr-2 h-4 w-4" /> Watch on YouTube
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </CardContent>
         </Card>
