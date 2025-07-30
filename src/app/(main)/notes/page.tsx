@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Download, Pencil, Wand2, Upload, Loader2 } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
 
 const formSchema = z.object({
   content: z.string().min(100, { message: 'Content must be at least 100 characters long.' }),
@@ -57,6 +58,10 @@ export default function NotesGeneratorPage() {
           </div>
         </div>
 
+      <div className="w-full flex justify-center">
+          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
+        </div>
+
       <div className="grid lg:grid-cols-2 gap-8">
         <Card>
             <CardHeader>
@@ -66,8 +71,8 @@ export default function NotesGeneratorPage() {
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <Button variant="outline" className="w-full" disabled>
-                        <Upload className="mr-2 h-4 w-4" /> Upload Chapter (PDF, DOCX) - Coming Soon
+                    <Button variant="outline" className="w-full">
+                        <Upload className="mr-2 h-4 w-4" /> Upload Chapter (PDF, DOCX)
                     </Button>
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -131,9 +136,8 @@ export default function NotesGeneratorPage() {
                 )}
             </CardContent>
             {revisionNotes && !isLoading && (
-              <CardFooter className="flex-col items-start gap-2 sm:flex-row sm:items-center">
+              <CardFooter>
                   <Button><Download className="mr-2 h-4 w-4" />Download PDF</Button>
-                  <Button variant="secondary">Unlock Summary (Watch Ad)</Button>
               </CardFooter>
             )}
         </Card>

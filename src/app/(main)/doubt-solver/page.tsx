@@ -71,6 +71,10 @@ export default function DoubtSolverPage() {
           <p className="text-muted-foreground">Stuck? Get instant help by typing your question or uploading a photo.</p>
         </div>
       </div>
+      
+      <div className="w-full flex justify-center">
+        <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
+      </div>
 
       <div className="grid md:grid-cols-2 gap-8">
         <Card>
@@ -140,6 +144,9 @@ export default function DoubtSolverPage() {
                 </CardDescription>
             </CardHeader>
            </Card>
+            <div className="w-full flex justify-center">
+              <Image src="https://placehold.co/300x250.png" width={300} height={250} alt="advertisement" data-ai-hint="advertisement banner" />
+            </div>
         </div>
       </div>
     </div>

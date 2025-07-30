@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Crown, User } from "lucide-react";
+import { User } from "lucide-react";
 import { Logo } from "@/components/icons";
 
 export function MainHeader() {
@@ -15,12 +15,6 @@ export function MainHeader() {
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" asChild>
-          <Link href="/premium">
-            <Crown className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Go Premium</span>
-          </Link>
-        </Button>
         <Button size="icon" variant="ghost">
           <User className="h-5 w-5" />
           <span className="sr-only">Profile</span>

@@ -113,7 +113,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold mt-12 mb-4 font-headline">Ready to Elevate Your Learning?</h2>
             <p className="text-muted-foreground mb-8">Join thousands of students and educators using AI to study smarter, not harder.</p>
             <Button size="lg" asChild>
-              <Link href="/premium">View Premium Plans</Link>
+              <Link href="/dashboard">Get Started</Link>
             </Button>
           </div>
         </section>

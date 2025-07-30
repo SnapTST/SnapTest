@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Book, BrainCircuit, CheckSquare, FileText, LayoutDashboard, Pencil, Sparkles, HelpCircle, Crown, Layers } from "lucide-react";
+import { Book, BrainCircuit, CheckSquare, FileText, LayoutDashboard, Pencil, Sparkles, HelpCircle, Layers } from "lucide-react";
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { Logo } from "@/components/icons";
 import { Separator } from "./ui/separator";
@@ -20,7 +20,6 @@ const mainNavItems = [
 
 const secondaryNavItems = [
     { href: "/how-it-works", icon: HelpCircle, label: "How It Works" },
-    { href: "/premium", icon: Crown, label: "Premium" },
 ]
 
 export function SidebarNav() {

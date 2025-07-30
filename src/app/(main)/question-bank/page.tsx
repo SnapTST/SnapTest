@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import Image from 'next/image';
 
 const formSchema = z.object({
   bookName: z.string().min(1, { message: "Please select a book." }),
@@ -75,6 +76,10 @@ export default function QuestionBankPage() {
           <p className="text-muted-foreground">Generate tests from popular books or browse pre-made papers.</p>
         </div>
       </div>
+
+       <div className="w-full flex justify-center">
+          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
+        </div>
 
       <Card>
         <CardHeader>
@@ -211,12 +216,15 @@ export default function QuestionBankPage() {
                   <h3 className="font-semibold">{paper.title}</h3>
                   <p className="text-sm text-muted-foreground">{paper.details}</p>
                 </div>
-                <Button variant="outline" className="w-full sm:w-auto"><Download className="mr-2 h-4 w-4" /> Download Full PDF (Watch Ad)</Button>
+                <Button variant="outline" className="w-full sm:w-auto"><Download className="mr-2 h-4 w-4" /> Download Full PDF</Button>
               </li>
             ))}
           </ul>
         </CardContent>
       </Card>
+      <div className="w-full flex justify-center">
+          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
+      </div>
     </div>
   );
 }

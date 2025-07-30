@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
+import Image from "next/image";
 
 export default function Dashboard() {
   const recentTests = [
@@ -24,6 +25,10 @@ export default function Dashboard() {
             <Link href="/question-bank"><PlusCircle className="mr-2 h-4 w-4" /> Create New Test</Link>
         </Button>
       </div>
+
+       <div className="w-full flex justify-center">
+          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
+        </div>
 
       <Card>
         <CardHeader>
@@ -59,11 +64,9 @@ export default function Dashboard() {
           </Table>
         </CardContent>
       </Card>
-      <Card className="text-center p-8">
-          <CardTitle>Unlock your full potential</CardTitle>
-          <CardDescription className="mt-2 mb-4">Go premium to get unlimited test generations, answer keys, and more!</CardDescription>
-          <Button asChild><Link href="/premium">Upgrade to Premium</Link></Button>
-      </Card>
+      <div className="w-full flex justify-center">
+          <Image src="https://placehold.co/728x90.png" width={728} height={90} alt="advertisement" data-ai-hint="advertisement banner" />
+        </div>
     </div>
   );
 }
