@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowRight, Book, BrainCircuit, CheckSquare, FileText, Sparkles, Pencil, Layers } from "lucide-react";
 import Image from 'next/image';
 import Link from "next/link";
@@ -94,11 +94,11 @@ export default function Home() {
                   <CardContent className="flex-grow">
                     <p className="text-muted-foreground">{feature.description}</p>
                   </CardContent>
-                  <div className="p-6 pt-0">
+                  <CardFooter>
                     <Button variant="outline" asChild>
                       <Link href={feature.link}>Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
-                  </div>
+                  </CardFooter>
                 </Card>
               ))}
             </div>

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { SidebarProvider, Sidebar, SidebarInset } from "@/components/ui/sidebar";
 import { MainHeader } from "@/components/main-header";
 import { SidebarNav } from "@/components/sidebar-nav";
+import { LandingHeader } from "@/components/landing-header";
 
 const mainLayoutPaths = [
   '/dashboard',
@@ -39,5 +40,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // This handles the landing page
   return <>{children}</>;
 }
