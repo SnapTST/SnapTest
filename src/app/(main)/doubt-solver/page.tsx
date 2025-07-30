@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { solveDoubt } from '@/ai/flows/solve-doubt';
+import { answerDoubt } from '@/ai/flows/answer-doubt';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -48,7 +49,7 @@ export default function DoubtSolverPage() {
     setIsLoading(true);
     setAnswer(null);
     try {
-      const result = await solveDoubt(values);
+      const result = await answerDoubt(values);
       setAnswer(result.answer);
     } catch (error) {
       console.error('Failed to solve doubt:', error);
