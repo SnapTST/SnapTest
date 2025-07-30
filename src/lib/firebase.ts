@@ -16,22 +16,28 @@ let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 
-if (firebaseConfig.apiKey) {
-    app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-} else {
-    // This is a fallback for server-side rendering or build environments
-    // where the env vars might not be available.
-    // We create a dummy app to avoid crashing the build.
-    if (!getApps().length) {
-        app = initializeApp({});
+// This function ensures that Firebase is initialized only once.
+function initializeFirebase() {
+  if (!getApps().length) {
+    if (firebaseConfig.apiKey) {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
     } else {
-        app = getApp();
+        // This is a dummy app for server-side rendering or build environments
+        // where the env vars might not be available.
+        app = initializeApp({});
+        auth = getAuth(app);
+        db = getFirestore(app);
     }
+  } else {
+    app = getApp();
     auth = getAuth(app);
     db = getFirestore(app);
+  }
 }
 
+// Call the function to initialize Firebase
+initializeFirebase();
 
 export { app, auth, db };
