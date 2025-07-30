@@ -10,12 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const recentTests: any[] = [
-    // { id: '1', name: 'Physics - Chapter 4 Test', date: '2023-10-26', score: '85%', subject: 'Physics' },
-    // { id: '2', name: 'Algebra II Quiz', date: '2023-10-24', score: '92%', subject: 'Math' },
-    // { id: '3', name: 'History of Modern India', date: '2023-10-22', score: '78%', subject: 'History' },
-    // { id: '4', name: 'Biology: Cell Structure', date: '2023-10-21', score: 'In Progress', subject: 'Biology' },
-  ];
+  const recentTests: any[] = [];
 
   return (
     <div className="space-y-8">
