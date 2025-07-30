@@ -9,3 +9,5 @@ import '@/ai/flows/solve-doubt.ts';
 import '@/ai/flows/summarize-ncert-solution.ts';
 import '@/ai/flows/answer-doubt.ts';
 import '@/ai/flows/summarize-ncert-question.ts';
+import '@/ai/flows/ocr-image.ts';
+import '@/ai/flows/generate-test-paper.ts';

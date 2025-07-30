@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Book, BrainCircuit, CheckSquare, FileText, LayoutDashboard, Pencil, Sparkles, HelpCircle, Crown } from "lucide-react";
+import { Book, BrainCircuit, CheckSquare, FileText, LayoutDashboard, Pencil, Sparkles, HelpCircle, Crown, Layers } from "lucide-react";
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { Logo } from "@/components/icons";
 import { Separator } from "./ui/separator";
 
 const mainNavItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { href: "/paper-generator", icon: Layers, label: "AI Paper Generator" },
     { href: "/question-bank", icon: Book, label: "Question Bank" },
     { href: "/ncert-solutions", icon: CheckSquare, label: "NCERT Solutions" },
     { href: "/ai-quiz", icon: BrainCircuit, label: "AI Quiz" },

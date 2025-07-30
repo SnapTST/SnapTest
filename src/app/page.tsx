@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LandingHeader } from "@/components/landing-header";
-import { ArrowRight, Book, BrainCircuit, CheckSquare, FileText, Sparkles, Pencil } from "lucide-react";
+import { ArrowRight, Book, BrainCircuit, CheckSquare, FileText, Sparkles, Pencil, Layers } from "lucide-react";
 import Image from 'next/image';
 import Link from "next/link";
 
 const features = [
+  {
+    icon: <Layers className="h-8 w-8 text-primary" />,
+    title: "AI Paper Generator",
+    description: "Generate full test papers by uploading images from your textbook.",
+    link: "/paper-generator",
+    dataAiHint: "paper stack"
+  },
   {
     icon: <Book className="h-8 w-8 text-primary" />,
     title: "Question Bank",
@@ -57,7 +64,7 @@ export default function Home() {
       <main className="flex-grow">
         <section className="py-20 md:py-32">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-6">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-6 font-headline">
               Smarter Studying Starts Here
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
@@ -76,13 +83,13 @@ export default function Home() {
 
         <section id="features" className="py-20 bg-secondary">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">All-in-One Learning Platform</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 font-headline">All-in-One Learning Platform</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feature) => (
                 <Card key={feature.title} className="flex flex-col">
                   <CardHeader className="flex flex-row items-center gap-4">
                     {feature.icon}
-                    <CardTitle>{feature.title}</CardTitle>
+                    <CardTitle className="font-headline">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-grow">
                     <p className="text-muted-foreground">{feature.description}</p>
@@ -103,7 +110,7 @@ export default function Home() {
              <div className="relative max-w-5xl mx-auto">
               <Image src="https://placehold.co/1200x600.png" alt="Dashboard preview" width={1200} height={600} className="rounded-lg shadow-2xl" data-ai-hint="dashboard screen" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mt-12 mb-4">Ready to Elevate Your Learning?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mt-12 mb-4 font-headline">Ready to Elevate Your Learning?</h2>
             <p className="text-muted-foreground mb-8">Join thousands of students and educators using AI to study smarter, not harder.</p>
             <Button size="lg" asChild>
               <Link href="/premium">View Premium Plans</Link>
