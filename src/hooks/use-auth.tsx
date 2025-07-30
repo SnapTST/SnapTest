@@ -2,7 +2,14 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { getAuth, onAuthStateChanged, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, type User as FirebaseAuthUser } from 'firebase/auth';
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  type User as FirebaseAuthUser 
+} from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { useToast } from './use-toast';
@@ -18,12 +25,10 @@ interface User {
 interface AuthContextType {
   user: User | null;
   firebaseUser: FirebaseAuthUser | null;
-  login: (name: string, email: string) => Promise<void>;
+  login: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   loading: boolean;
 }
-
-const EMAIL_FOR_SIGN_IN_KEY = 'emailForSignIn';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -32,50 +37,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseAuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
   useEffect(() => {
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Handle the sign-in link
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      let email = window.localStorage.getItem(EMAIL_FOR_SIGN_IN_KEY);
-      if (!email) {
-        // User opened the link on a different device. To prevent session fixation
-        // attacks, ask the user to provide the email again.
-        email = window.prompt('Please provide your email for confirmation');
-      }
-      if(email) {
-        signInWithEmailLink(auth, email, window.location.href)
-          .then(async (result) => {
-            window.localStorage.removeItem(EMAIL_FOR_SIGN_IN_KEY);
-            const userDocRef = doc(db, "users", result.user.uid);
-            const userDocSnap = await getDoc(userDocRef);
-            if (!userDocSnap.exists()) {
-                // This is a new user, create their document.
-                await setDoc(userDocRef, {
-                    email: result.user.email,
-                    createdAt: serverTimestamp(),
-                }, { merge: true });
-            }
-            toast({
-              title: "Successfully Signed In",
-              description: "Welcome back!",
-            });
-          })
-          .catch((error) => {
-            console.error("Error signing in with email link:", error);
-            toast({
-              title: "Sign In Failed",
-              description: "The sign-in link is invalid or has expired.",
-              variant: "destructive",
-            });
-          });
-      }
-    }
-
-
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      setLoading(true);
       if (fbUser) {
         setFirebaseUser(fbUser);
         const userDocRef = doc(db, "users", fbUser.uid);
@@ -91,20 +58,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           
           setUser({
             uid: fbUser.uid,
-            name: userData.name || 'User', // Fallback name
+            name: fbUser.displayName || userData.name || 'User', // Use updated display name
             email: userData.email,
             avatar: `https://i.pravatar.cc/150?u=${userData.email}`,
             createdAt: createdAtDate,
           });
 
         } else {
-          // If the user document doesn't exist, create it.
+          // This case might happen if Firestore doc creation failed before
            const newUserData = {
             email: fbUser.email,
             name: fbUser.displayName || 'New User',
             createdAt: serverTimestamp()
           };
-          await setDoc(userDocRef, newUserData);
+          await setDoc(userDocRef, newUserData, { merge: true });
           setUser({
              uid: fbUser.uid,
              name: newUserData.name,
@@ -121,52 +88,77 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, [toast]);
+  }, [auth, db]);
 
-  const login = async (name: string, email: string) => {
+  const login = async (name: string, email: string, password: string): Promise<boolean> => {
     setLoading(true);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    
-    const actionCodeSettings = {
-      // URL to redirect back to. The domain (www.example.com) must be authorized
-      // in the Firebase Console.
-      url: window.location.href,
-      handleCodeInApp: true,
-    };
-
     try {
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      window.localStorage.setItem(EMAIL_FOR_SIGN_IN_KEY, email);
-      
-       const userDocRef = doc(db, 'users-by-email', email);
-       const userDocSnap = await getDoc(userDocRef);
-
-       if(!userDocSnap.exists() && name) {
-          // This is a temporary way to associate a name before the user clicks the link
-          // In a real app, you'd probably have a separate profile creation step.
-           await setDoc(doc(db, 'temp-users', email), { name });
-       }
-
+      // Try to sign in first
+      await signInWithEmailAndPassword(auth, email, password);
       toast({
-        title: "Magic Link Sent!",
-        description: "Check your email for the sign-in link.",
+        title: "Signed In Successfully",
+        description: "Welcome back!",
       });
+      return true;
 
     } catch (error: any) {
-      console.error("Error sending sign-in link:", error);
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      })
+      if (error.code === 'auth/user-not-found') {
+        // If user not found, create a new account
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const fbUser = userCredential.user;
+
+          // Update profile display name
+          if (name) {
+            await updateProfile(fbUser, { displayName: name });
+          }
+
+          // Create user document in Firestore
+          const userDocRef = doc(db, "users", fbUser.uid);
+          const newUserData = {
+            email: fbUser.email,
+            name: name || 'New User',
+            createdAt: serverTimestamp(),
+          };
+          await setDoc(userDocRef, newUserData);
+          
+          toast({
+            title: "Account Created",
+            description: "Welcome to SnapTest Enhanced!",
+          });
+          return true;
+
+        } catch (createError: any) {
+          console.error("Error creating user:", createError);
+          toast({
+            title: "Sign Up Failed",
+            description: createError.message,
+            variant: "destructive",
+          });
+          return false;
+        }
+      } else if (error.code === 'auth/wrong-password') {
+         toast({
+            title: "Login Failed",
+            description: "Incorrect password. Please try again.",
+            variant: "destructive",
+          });
+          return false;
+      } else {
+        console.error("Error signing in:", error);
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        })
+        return false;
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const logout = async () => {
-    const auth = getAuth(app);
     await auth.signOut();
     setUser(null);
     setFirebaseUser(null);
